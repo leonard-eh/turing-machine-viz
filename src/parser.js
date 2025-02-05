@@ -107,8 +107,8 @@ function checkTableType(val) {
   }
   if (typeof val !== 'object') {
     throw new TMSpecError('Transition table has an invalid type',
-    {problemValue: typeof val,
-    info: 'The transition table should be a nested mapping from states to symbols to instructions'});
+      {problemValue: typeof val,
+        info: 'The transition table should be a nested mapping from states to symbols to instructions'});
   }
 }
 
@@ -120,7 +120,7 @@ function parseSynonyms(val, table) {
   if (typeof val !== 'object') {
     throw new TMSpecError('Synonyms table has an invalid type',
       {problemValue: typeof val,
-      info: 'Synonyms should be a mapping from string abbreviations to instructions'
+        info: 'Synonyms should be a mapping from string abbreviations to instructions'
         + ' (e.g. <code>accept: {R: accept}</code>)'});
   }
   return _.mapValues(val, function (actionVal, key) {
@@ -147,8 +147,8 @@ function parseTable(synonyms, val) {
     }
     if (typeof stateObj !== 'object') {
       throw new TMSpecError('State entry has an invalid type',
-      {problemValue: typeof stateObj, state: state,
-      info: 'Each state should map symbols to instructions. An empty map signifies a halting state.'});
+        {problemValue: typeof stateObj, state: state,
+          info: 'Each state should map symbols to instructions. An empty map signifies a halting state.'});
     }
     return _.mapValues(stateObj, function (actionVal, symbol) {
       try {
@@ -174,7 +174,7 @@ function makeInstruction(symbol, move, state) {
 function checkTarget(table, instruct) {
   if (instruct.state != null && !(instruct.state in table)) {
     throw new TMSpecError('Undeclared state', {problemValue: instruct.state,
-    suggestion: 'Make sure to list all states in the transition table and define their transitions (if any)'});
+      suggestion: 'Make sure to list all states in the transition table and define their transitions (if any)'});
   }
   return instruct;
 }
@@ -197,6 +197,7 @@ function parseInstruction(synonyms, table, val) {
 
 var moveLeft = Object.freeze({move: TM.MoveHead.left});
 var moveRight = Object.freeze({move: TM.MoveHead.right});
+var moveNeutral = Object.freeze({move: TM.MoveHead.neutral});
 
 // case: direction or synonym
 function parseInstructionString(synonyms, val) {
@@ -204,13 +205,15 @@ function parseInstructionString(synonyms, val) {
     return moveLeft;
   } else if (val === 'R') {
     return moveRight;
+  } else if (val === 'N') {
+    return moveNeutral;
   }
-  // note: this order prevents overriding L/R in synonyms, as that would
+  // note: this order prevents overriding L/R/N in synonyms, as that would
   // allow inconsistent notation, e.g. 'R' and {R: ..} being different.
   if (synonyms && synonyms[val]) { return synonyms[val]; }
   throw new TMSpecError('Unrecognized string',
     {problemValue: val,
-    info: 'An instruction can be a string if it\'s a synonym or a direction'});
+      info: 'An instruction can be a string if it\'s a synonym or a direction'});
 }
 
 // type ActionObj = {write?: any, L: ?string} | {write?: any, R: ?string}
@@ -223,18 +226,18 @@ function parseInstructionObject(val) {
     var badKey;
     if (!Object.keys(val).every(function (key) {
       badKey = key;
-      return key === 'L' || key === 'R' || key === 'write';
+      return key === 'L' || key === 'R' || key === 'N' || key === 'write';
     })) {
       throw new TMSpecError('Unrecognized key',
-      {problemValue: badKey,
-      info: 'An instruction always has a tape movement <code>L</code> or <code>R</code>, '
-        + 'and optionally can <code>write</code> a symbol'});
+        {problemValue: badKey,
+          info: 'An instruction always has a tape movement <code>L</code> or <code>R</code>, '
+            + 'and optionally can <code>write</code> a symbol'});
     }
   })();
-  // one L/R key is required, with optional state value
-  if ('L' in val && 'R' in val) {
+  // one L/R/N key is required, with optional state value
+  if ('L' in val && 'R' in val || 'L' in val && 'N' in val || 'R' in val && 'N' in val) {
     throw new TMSpecError('Conflicting tape movements',
-    {info: 'Each instruction needs exactly one movement direction, but two were found'});
+    {info: 'Each instruction needs exactly one movement direction (L, R, N), but more than one was found'});
   }
   if ('L' in val) {
     move = TM.MoveHead.left;
@@ -242,6 +245,9 @@ function parseInstructionObject(val) {
   } else if ('R' in val) {
     move = TM.MoveHead.right;
     state = val.R;
+  } else if ('N' in val) {
+    move = TM.MoveHead.neutral;
+    state = val.N;
   } else {
     throw new TMSpecError('Missing movement direction');
   }
