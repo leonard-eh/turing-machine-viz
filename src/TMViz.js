@@ -16,6 +16,8 @@ var TuringMachine = require('./TuringMachine').TuringMachine,
     watchInit = require('./watch').watchInit,
     d3 = require('d3');
 
+var SpeedInputController = require('./SpeedInputController');
+
 /**
  * Create an animated transition function.
  * @param  {StateGraph} graph
@@ -42,8 +44,10 @@ function pulseEdge(edge) {
   return edgepath
       .classed('active-edge', true)
     .transition()
+      .duration(SpeedInputController.getStepInterval())
       .style('stroke-width', '3px')
     .transition()
+      .duration(SpeedInputController.getStepInterval())
       .style('stroke-width', '1px')
     .transition()
       .duration(0)
@@ -77,14 +81,13 @@ function TMViz(div, spec, posTable) {
   if (posTable != undefined) { this.positionTable = posTable; }
 
   this.edgeAnimation = pulseEdge;
-  this.stepInterval = 100;
 
   var self = this;
   // We hook into the animation callback to know when to start the next step (when running).
   function animateAndContinue(edge) {
     var transition = self.edgeAnimation(edge);
     if (self.isRunning) {
-      transition.transition().duration(self.stepInterval).each('end', function () {
+      transition.transition().duration(SpeedInputController.getStepInterval()).each('end', function () {
         // stop if machine was paused during the animation
         if (self.isRunning) { self.step(); }
       });

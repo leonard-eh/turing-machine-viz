@@ -471,23 +471,28 @@ aria-labelledby="importPanelHeader">
       </div>
       <!-- Simulator controls -->
       <div id="controls-container" class="row text-center">
+        <div class="col-md-4"></div>
         <div class="col-xs-1">
-          <button type="button" class="btn btn-warning btn-xs text-center tm-btn-diagram tm-reset">
+          <button type="button" class="btn btn-warning text-center tm-btn-diagram tm-reset">
             <span class="glyphicon glyphicon-fast-backward" aria-hidden="true"></span><br>
             Reset
           </button>
         </div>
-        <div class="col-xs-2 col-xs-offset-4 text-center">
+        <div class="col-xs-1 text-center">
           <button type="button" class="btn btn-primary text-center tm-btn-diagram tm-step">
             <span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span><br>
             Step
           </button>
         </div>
         <div class="col-xs-1">
-          <button type="button" class="btn btn-default text-center tm-btn-diagram tm-run">
+          <button type="button" class="btn btn-success text-center tm-btn-diagram tm-run">
             <span class="glyphicon glyphicon-play" aria-hidden="true"></span><br>
             Run
           </button>
+        </div>
+        <div id="speed-slider"class="col-md-3">
+          <label for="speed-slider-input">Loading...</label>
+          <input id="speed-slider-input" type="range" min="0" max="100" step="2.5" value="10"/>
         </div>
       </div>
     </div>

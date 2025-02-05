@@ -10,6 +10,12 @@ var TMDocumentController = require('./TMDocumentController'),
 var ace = require('ace-builds/src-min-noconflict');
 var $ = require('jquery'); // for Bootstrap modal dialog events
 
+var SpeedInputController = require('./SpeedInputController');
+var speedInput = document.querySelector('#speed-slider input');
+var speedLabel = document.querySelector('#speed-slider label');
+
+SpeedInputController.initialize(speedInput, speedLabel);
+
 // load up front so going offline doesn't break anything
 // (for snippet placeholders, used by "New blank document")
 ace.config.loadModule('ace/ext/language_tools');
