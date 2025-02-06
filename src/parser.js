@@ -254,13 +254,18 @@ function parseInstructionObject(val) {
   // write key is optional, but must contain a char value if present
   if ('write' in val) {
     var writeStr = String(val.write);
-    if (writeStr.length === 1) {
+    if (writeStr.length === 1 || isValidTupleSymbol(writeStr)) {
       symbol = writeStr;
     } else {
-      throw new TMSpecError('Write requires a string of length 1');
+      throw new TMSpecError('Write requires a string of length 1 or a 2-tuple containing strings of length 1');
     }
   }
   return makeInstruction(symbol, move, state);
+}
+
+// check if a string is a valid 2-tuple symbol consisting of '(x/y)' where x and y are single characters
+function isValidTupleSymbol(string) {  
+  return string.length === 5 && string[0] === '(' && string[2] === '/' && string[4] === ')';
 }
 
 exports.TMSpecError = TMSpecError;
