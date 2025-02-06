@@ -14,8 +14,14 @@ function initTapeCells(selection) {
       .attr({'width': cellWidth,
              'height': cellHeight});
   selection.append('text')
-      .text(function (d) { return d; })
-      .attr({'x': cellWidth/2, 'y': cellHeight/2 + 8});
+      .text(function (d) {return getText(d, 'center');})
+      .attr({'x': cellWidth/2, 'y': cellHeight/2 + 8, 'class': 'center-text'});
+  selection.append('text')
+      .text(function (d) {return getText(d, 'top');})
+      .attr({'x': cellWidth/2, 'y': cellHeight/2 - 4, 'class': 'top-text'});
+  selection.append('text')
+      .text(function (d) {return getText(d, 'bottom');})
+      .attr({'x': cellWidth/2, 'y': cellHeight/2 + 22, 'class': 'bottom-text'});
   return selection;
 }
 
@@ -95,14 +101,50 @@ TapeViz.prototype.write = function (symbol) {
 
   d3.select(this.wrapper[0][0].childNodes[this.lookaround])
       .datum(symbol)
-    .select('text')
+    .select('.center-text') 
       .attr('fill-opacity', '1')
       .attr('stroke-opacity', '1')
     .transition()
       .attr('fill-opacity', '0.4')
       .attr('stroke-opacity', '0.1')
     .transition()
-      .text(function (d) { return d; })
+      .text(function (d) {return getText(d, 'center');})
+      .attr('fill-opacity', '1')
+      .attr('stroke-opacity', '1')
+    .transition()
+      .duration(0)
+      .attr('fill-opacity', null)
+      .attr('stroke-opacity', null)
+    ;
+  
+  d3.select(this.wrapper[0][0].childNodes[this.lookaround])
+      .datum(symbol)
+    .select('.top-text') 
+      .attr('fill-opacity', '1')
+      .attr('stroke-opacity', '1')
+    .transition()
+      .attr('fill-opacity', '0.4')
+      .attr('stroke-opacity', '0.1')
+    .transition()
+      .text(function (d) {return getText(d, 'top');})
+      .attr('fill-opacity', '1')
+      .attr('stroke-opacity', '1')
+    .transition()
+      .duration(0)
+      .attr('fill-opacity', null)
+      .attr('stroke-opacity', null)
+    ;
+
+  d3.select(this.wrapper[0][0].childNodes[this.lookaround])
+      .datum(symbol)
+    .select('.bottom-text') 
+      .attr('fill-opacity', '1')
+      .attr('stroke-opacity', '1')
+    .transition()
+      .attr('fill-opacity', '0.4')
+      .attr('stroke-opacity', '0.1')
+    .transition()
+      .text(function (d) {return getText(d, 'bottom');})
       .attr('fill-opacity', '1')
       .attr('stroke-opacity', '1')
     .transition()
@@ -111,6 +153,24 @@ TapeViz.prototype.write = function (symbol) {
       .attr('stroke-opacity', null)
     ;
 };
+
+function getText(d, position) {
+  if (d.length === 1) {
+    if(position === 'center') {
+      return d;
+    } else {
+      return '';
+    }
+  } else {
+    if(position === 'center') {
+      return '---';
+    } else if(position === 'top') {
+      return d[1];
+    } else if(position === 'bottom') {
+      return d[3];
+    }
+  }
+}
 
 function moveHead(wrapper, enter, exit, wOffset, cOffset) {
   // add to one end
