@@ -14,7 +14,11 @@ var SpeedInputController = require('./SpeedInputController');
 var speedInput = document.querySelector('#speed-slider input');
 var speedLabel = document.querySelector('#speed-slider label');
 
+var TransitionCounter = require('./TransitionCounter');
+var transitionCounterLabel = document.querySelector('#transition-counter');
+
 SpeedInputController.initialize(speedInput, speedLabel);
+TransitionCounter.initialize(transitionCounterLabel);
 
 // load up front so going offline doesn't break anything
 // (for snippet placeholders, used by "New blank document")

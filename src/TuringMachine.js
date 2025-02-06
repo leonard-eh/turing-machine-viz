@@ -1,4 +1,7 @@
 'use strict';
+
+var TransitionCounter = require('./TransitionCounter');
+
 /**
  * Construct a Turing machine.
  * @param {(state, symbol) -> ?{state: state, symbol: symbol, move: direction}}
@@ -32,6 +35,7 @@ TuringMachine.prototype.step = function () {
   move(this.tape, instruct.move);
   this.state = instruct.state;
 
+  TransitionCounter.increment();
   return true;
 };
 

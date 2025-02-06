@@ -18,6 +18,8 @@ var TuringMachine = require('./TuringMachine').TuringMachine,
 
 var SpeedInputController = require('./SpeedInputController');
 
+var TransitionCounter = require('./TransitionCounter');
+
 /**
  * Create an animated transition function.
  * @param  {StateGraph} graph
@@ -99,6 +101,7 @@ function TMViz(div, spec, posTable) {
     spec.startState,
     addTape(div, spec)
   );
+  TransitionCounter.reset();
   // intercept and animate when the state is set
   watchInit(this.machine, 'state', function (prop, oldstate, newstate) {
     d3.select(graph.getVertex(oldstate).domNode).classed('current-state', false);
@@ -148,6 +151,7 @@ TMViz.prototype.reset = function () {
   this.machine.state = this.__spec.startState;
   this.machine.tape.domNode.remove();
   this.machine.tape = addTape(this.__parentDiv, this.__spec);
+  TransitionCounter.reset();
 };
 
 Object.defineProperty(TMViz.prototype, 'positionTable', {
