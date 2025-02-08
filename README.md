@@ -1,26 +1,13 @@
-# [turingmachine.io](http://turingmachine.io)
+# [www.tm-viz.netlify.app](https://tm-viz.netlify.app/)
 
-This is a [Turing machine] visualizer designed for learning through visual thinking and creative exploration.
+This is a fork of [turingmachine.io](http://turingmachine.io) (GitHub: [aepsilon/turing-machine-viz](https://github.com/aepsilon/turing-machine-viz)).
 
-Machines are described in a simple YAML-based format.
-As you code, each save updates the state diagram; this offers the speed and directness of code, combined with the visual intuitiveness of a graphical editor.
 
-Multiple example machines are provided, each one with commentary that touches on concepts like subroutines and inductive definitions / recursion.
-Many examples include exercises that build on the machines and deepen understanding.
-To encourage experimentation, the document system provides for quick snapshots and autosaving to browser local storage.
-
-All in all, this is the simulator I wish I had when taking automata theory.
-At the same time, I’ve tried to make it accessible to people who aren’t in computer science, or haven’t heard of a Turing machine before.
-
-Feel free to email me if you have any questions, comments, or feedback in general about the project.
-Bug reports and feature requests are also welcome on the [issue tracker].
-Some known issues and ideas for improvement are outlined on the [wiki].
-
-[Turing machine]: http://plato.stanford.edu/entries/turing-machine
-
-[issue tracker]:  https://github.com/aepsilon/turing-machine-viz/issues
-[wiki]:           https://github.com/aepsilon/turing-machine-viz/wiki
-
+## Changes
+- A slider has been added to adjust the TM's animation speed.
+- An option for neutral movement (`N`) has been added.
+- 2-tuples (`(x/y)`) have been introduced as possible tape symbols with a suitable graphical representation, allowing for better visualization of the multi-track technique.
+- A counter for tracking the number of transitions executed by the TM has been added.
 
 ## Development Setup
 
